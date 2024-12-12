@@ -1,26 +1,39 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>Csapat List</h1>
+    <ul>
+      <li v-for="csapat in csapatList" :key="csapat.csapatId">
+        {{ csapat.csapatNev }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios';
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  data() {
+    return {
+      csapatList: [], // To store the list of Csapat
+    };
+  },
+  mounted() {
+    this.getCsapat(); // Call the API when the component is mounted
+  },
+  methods: {
+    async getCsapat() {
+      try {
+        const response = await axios.get('http://localhost:5163/api/Csapat');
+        this.csapatList = response.data; // Store the response data in csapatList
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+/* Add your styles here */
 </style>
