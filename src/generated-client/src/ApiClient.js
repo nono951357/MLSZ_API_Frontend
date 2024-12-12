@@ -10,9 +10,8 @@
  * Do not edit the class manually.
  *
  */
-
-
-import superagent from "superagent";
+/* eslint-disable */
+import superagent from 'superagent';
 
 /**
 * @module ApiClient
@@ -32,12 +31,15 @@ class ApiClient {
      * Overrides the default value set in spec file if present
      * @param {String} basePath
      */
-    constructor(basePath = 'http://localhost') {
+    constructor(basePath = `http://localhost:5163`) {
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
-         * @default http://localhost
+         * @default http://localhost:
          */
+
+        console.log('basePath', basePath);
+        console.log('process.env.PORT', process.env.PORT);
         this.basePath = basePath.replace(/\/+$/, '');
 
         /**
@@ -132,7 +134,7 @@ class ApiClient {
         } catch (err) {
             return false;
         }
-    };
+    }
 
    /**
     * Builds full URL by appending the given path to the base URL and replacing path parameter place-holders with parameter values.
@@ -154,8 +156,9 @@ class ApiClient {
             url = apiBasePath + path;
         }
 
-        url = url.replace(/\{([\w-\.#]+)\}/g, (fullMatch, key) => {
+        url = url.replace(/\{([\w-.#]+)\}/g, (fullMatch, key) => {
             var value;
+            // eslint-disable-next-line
             if (pathParams.hasOwnProperty(key)) {
                 value = this.paramToString(pathParams[key]);
             } else {
@@ -209,10 +212,11 @@ class ApiClient {
             let fs;
             try {
                 fs = require('fs');
-            } catch (err) {}
+            } catch (err) {
             if (fs && fs.ReadStream && param instanceof fs.ReadStream) {
                 return true;
             }
+        }
         }
 
         // Buffer in Node.js
@@ -246,6 +250,7 @@ class ApiClient {
     normalizeParams(params) {
         var newParams = {};
         for (var key in params) {
+            // eslint-disable-next-line
             if (params.hasOwnProperty(key) && params[key] != undefined && params[key] != null) {
                 var value = params[key];
                 if (this.isFileParam(value) || Array.isArray(value)) {
@@ -563,7 +568,7 @@ class ApiClient {
                 } else if (typeof type === 'object') {
                     // for plain object type like: {'String': 'Integer'}
                     var keyType, valueType;
-                    for (var k in type) {
+                    for (const k in type) {
                         if (type.hasOwnProperty(k)) {
                             keyType = k;
                             valueType = type[k];
@@ -572,7 +577,7 @@ class ApiClient {
                     }
 
                     var result = {};
-                    for (var k in data) {
+                    for (const k in data) {
                         if (data.hasOwnProperty(k)) {
                             var key = ApiClient.convertToType(k, keyType);
                             var value = ApiClient.convertToType(data[k], valueType);
@@ -637,8 +642,7 @@ class ApiClient {
     static constructFromObject(data, obj, itemType) {
         if (Array.isArray(data)) {
             for (var i = 0; i < data.length; i++) {
-                if (data.hasOwnProperty(i))
-                    obj[i] = ApiClient.convertToType(data[i], itemType);
+                obj[i] = ApiClient.convertToType(data[i], itemType);
             }
         } else {
             for (var k in data) {
@@ -646,7 +650,8 @@ class ApiClient {
                     obj[k] = ApiClient.convertToType(data[k], itemType);
             }
         }
-    };
+        return obj;
+    }
 }
 
 /**

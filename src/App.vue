@@ -2,36 +2,41 @@
   <div>
     <h1>Csapat List</h1>
     <ul>
-      <li v-for="csapat in csapatList" :key="csapat.csapatId">
-        {{ csapat.csapatNev }}
-      </li>
+      <li v-for="csapat in csapatList" :key="csapat.csapatId">{{ csapat.csapatNev }}</li>
+      <li>Összesen: {{ csapatList.length }}</li>
+      <button @click="fetchCsapatList">Újjra lekérdezés</button>
     </ul>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import CsapatApi from './generated-client/src/api/CsapatApi';
+import ApiClient from './generated-client/src/ApiClient';
 
 export default {
   data() {
     return {
-      csapatList: [], // To store the list of Csapat
+      csapatList: []
     };
   },
-  mounted() {
-    this.getCsapat(); // Call the API when the component is mounted
+  created() {
+    this.fetchCsapatList();
   },
   methods: {
-    async getCsapat() {
-      try {
-        const response = await axios.get('http://localhost:5163/api/Csapat');
-        this.csapatList = response.data; // Store the response data in csapatList
-      } catch (error) {
-        console.error('Error fetching data:', error);
+    fetchCsapatList() {
+      const apiClient = new ApiClient();
+      const csapatApi = new CsapatApi(apiClient);
+      
+      csapatApi.apiCsapatGet((error, data) => {
+        if (error) {
+            console.error(error);
+          } else {
+            this.csapatList = data;
+          }
+        });
       }
-    },
-  },
-};
+    }
+  };
 </script>
 
 <style>

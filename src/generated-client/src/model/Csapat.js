@@ -25,7 +25,6 @@ class Csapat {
      * @alias module:model/Csapat
      */
     constructor() { 
-        
         Csapat.initialize(this);
     }
 
@@ -35,6 +34,13 @@ class Csapat {
      * Only for internal use.
      */
     static initialize(obj) { 
+        obj['csapatId'] = undefined;
+        obj['csapatNev'] = undefined;
+        obj['alapitasDatum'] = undefined;
+        obj['jelenlegiEdzo'] = undefined;
+        obj['stadionId'] = undefined;
+        obj['statusz'] = undefined;
+        obj['media_Id'] = undefined;
     }
 
     /**
@@ -47,26 +53,26 @@ class Csapat {
     static constructFromObject(data, obj) {
         if (data) {
             obj = obj || new Csapat();
-
-            if (data.hasOwnProperty('csapatId')) {
+    
+            if (Object.prototype.hasOwnProperty.call(data, 'csapatId')) {
                 obj['csapatId'] = ApiClient.convertToType(data['csapatId'], 'Number');
             }
-            if (data.hasOwnProperty('csapatNev')) {
+            if (Object.prototype.hasOwnProperty.call(data, 'csapatNev')) {
                 obj['csapatNev'] = ApiClient.convertToType(data['csapatNev'], 'String');
             }
-            if (data.hasOwnProperty('alapitasDatum')) {
+            if (Object.prototype.hasOwnProperty.call(data, 'alapitasDatum')) {
                 obj['alapitasDatum'] = ApiClient.convertToType(data['alapitasDatum'], 'Date');
             }
-            if (data.hasOwnProperty('jelenlegiEdzo')) {
+            if (Object.prototype.hasOwnProperty.call(data, 'jelenlegiEdzo')) {
                 obj['jelenlegiEdzo'] = ApiClient.convertToType(data['jelenlegiEdzo'], 'String');
             }
-            if (data.hasOwnProperty('stadionId')) {
+            if (Object.prototype.hasOwnProperty.call(data, 'stadionId')) {
                 obj['stadionId'] = ApiClient.convertToType(data['stadionId'], 'Number');
             }
-            if (data.hasOwnProperty('statusz')) {
+            if (Object.prototype.hasOwnProperty.call(data, 'statusz')) {
                 obj['statusz'] = CsapatStatusz.constructFromObject(data['statusz']);
             }
-            if (data.hasOwnProperty('media_Id')) {
+            if (Object.prototype.hasOwnProperty.call(data, 'media_Id')) {
                 obj['media_Id'] = ApiClient.convertToType(data['media_Id'], 'Number');
             }
         }
@@ -90,11 +96,7 @@ class Csapat {
 
         return true;
     }
-
-
 }
-
-
 
 /**
  * @member {Number} csapatId
@@ -131,10 +133,4 @@ Csapat.prototype['statusz'] = undefined;
  */
 Csapat.prototype['media_Id'] = undefined;
 
-
-
-
-
-
 export default Csapat;
-
